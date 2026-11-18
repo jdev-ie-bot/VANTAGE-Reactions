@@ -23,22 +23,4 @@ struct InternalStateEquals {
   }
 };
 
-/**
- * @brief Functor for marking particles with very small weight.
- */
-struct SmallWeightMarker {
-  template <typename T> bool operator()(const T &w) const {
-    return w[0] < 1e-12;
-  }
-};
-
-/**
- * @brief Functor for removing all particles in a subgroup.
- */
-struct RemoveSubgroupTransform {
-  template <typename T> void operator()(T target) const {
-    target->get_particle_group()->remove_particles(target);
-  }
-};
-
 #endif

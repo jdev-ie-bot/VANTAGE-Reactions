@@ -5,8 +5,34 @@
 #include "transformation_wrapper.hpp"
 #include "utils.hpp"
 #include <memory>
+#include <type_traits>
 
 namespace VANTAGE::Reactions {
+
+/**
+ * @brief Set one component of an INT or REAL property on the selected
+ * particles. Other components and particles outside the target subgroup are
+ * unchanged. The value is copied into the strategy.
+ *
+ * @param sym Property to write.
+ * @param value Value to assign (converted to the property's type).
+ * @param component Component to write; must be a valid index in the property.
+ * @return A transformation strategy for use alone or in a
+ * TransformationWrapper.
+ */
+template <typename T>
+inline std::shared_ptr<TransformationStrategy>
+make_set_value_transformation_strategy(NP::Sym<T> sym,
+                                       std::common_type_t<T> value,
+                                       int component = 0) {
+  static_assert(std::is_same_v<T, INT> || std::is_same_v<T, REAL>,
+                "Setting a value requires an INT or REAL property.");
+  NESOASSERT(component >= 0, "Assignment component must be non-negative.");
+  return make_direct_transformation_strategy(
+      "set_value", [=](auto property) { property[component] = value; },
+      NP::Access::write(sym));
+}
+
 /**
  * @brief No operations transformation strategy
  */

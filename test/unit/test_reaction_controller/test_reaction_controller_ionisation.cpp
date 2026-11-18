@@ -31,12 +31,10 @@ TEST(ReactionController, ionisation_reaction) {
 
   reaction_controller.apply(particle_group, 1.5);
 
-  auto accessor = NP::Access::read(NP::Sym<REAL>("WEIGHT"));
-
   auto test_removal_wrapper = std::make_shared<TransformationWrapper>(
       std::vector<std::shared_ptr<MarkingStrategy>>{
-          make_direct_marking_strategy("small", SmallWeightMarker{}, accessor)},
-      make_lambda_transformation_strategy("remove", RemoveSubgroupTransform{}));
+          make_less_than_marking_strategy(NP::Sym<REAL>("WEIGHT"), 1e-12)},
+      make_transformation_strategy<SimpleRemovalTransformationStrategy>());
 
   auto num_cells = particle_group->domain->mesh->get_cell_count();
 

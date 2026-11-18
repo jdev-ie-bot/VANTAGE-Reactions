@@ -12,12 +12,10 @@ TEST(ReactionController, surface_mode_test) {
 
   auto particle_group = create_test_particle_group(N_total);
 
-  auto accessor = NP::Access::read(NP::Sym<REAL>("WEIGHT"));
-
   auto test_removal_wrapper = std::make_shared<TransformationWrapper>(
       std::vector<std::shared_ptr<MarkingStrategy>>{
-          make_direct_marking_strategy("small", SmallWeightMarker{}, accessor)},
-      make_lambda_transformation_strategy("remove", RemoveSubgroupTransform{}));
+          make_less_than_marking_strategy(NP::Sym<REAL>("WEIGHT"), 1e-12)},
+      make_transformation_strategy<SimpleRemovalTransformationStrategy>());
 
   auto reaction_controller = ReactionController(
       std::vector<std::shared_ptr<TransformationWrapper>>{test_removal_wrapper},

@@ -19,6 +19,30 @@ A marking strategy is the abstract wrapper class for the creation of NESO-Partic
    :language: cpp
    :caption: Example of the direct marking strategy
 
+Common strategy helpers
+~~~~~~~~~~~~~~~~~~~~~~~
+
+``make_equal_to_marking_strategy``, ``make_less_than_marking_strategy`` and
+``make_greater_than_marking_strategy`` select particles by comparing one
+component of an ``INT`` or ``REAL`` property with a constant. For other binary
+predicates, use ``make_comparison_marking_strategy``; standard function objects
+such as ``std::less_equal<REAL>`` provide inclusive comparisons.
+
+``make_set_value_transformation_strategy`` assigns a constant to one component
+of a property on the selected particles. For removal, use the existing
+``SimpleRemovalTransformationStrategy``. These helpers use the direct strategy
+interface and compose with other markers and transformations as usual.
+
+The optional component index defaults to zero and must be valid for the
+property. Constants are converted to the property's type and copied into the
+strategy, so the original variables need not remain alive. Comparisons follow
+ordinary C++ rules: equality is exact, and no floating-point tolerance is
+applied. Custom predicates must be device-copyable and callable in a SYCL kernel.
+
+.. literalinclude:: ../example_sources/example_common_strategies.hpp
+   :language: cpp
+   :caption: Common marking and transformation helpers
+
 
 Transformation Strategies
 =========================

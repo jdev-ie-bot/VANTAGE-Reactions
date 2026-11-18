@@ -5,6 +5,7 @@ using namespace VANTAGE::Reactions;
 
 #include "../example_sources/example_accumulator_strategy.hpp"
 #include "../example_sources/example_cellwise_distributor_strategy.hpp"
+#include "../example_sources/example_common_strategies.hpp"
 #include "../example_sources/example_composite_strategy.hpp"
 #include "../example_sources/example_direct_transformations.hpp"
 #include "../example_sources/example_marking_strategy.hpp"
@@ -37,6 +38,7 @@ TEST(Examples, strategies) {
   vranic_merging_strategy_example(particle_group);
   simple_thinning_strategy_example(particle_group);
   uniform_velocity_binning_example(particle_group);
+  common_strategies_example(particle_group);
 
   particle_group->domain->mesh->free();
 }
